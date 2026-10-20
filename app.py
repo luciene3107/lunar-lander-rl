@@ -114,7 +114,9 @@ with aba_demos:
 
     if os.path.exists(os.path.join(GIFS, "treino_progresso.gif")):
         st.subheader("Evolução durante o treino")
-        mostrar_gif("treino_progresso.gif", "Mesmo cenário em vários momentos do treino")
+        _, centro, _ = st.columns([1, 2, 1])
+        with centro:
+            mostrar_gif("treino_progresso.gif", "Mesmo cenário em vários momentos do treino")
 
     st.subheader("Onde o agente erra")
     c, d = st.columns(2)
