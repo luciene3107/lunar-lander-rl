@@ -13,10 +13,24 @@ IMGS = os.path.join(BASE, "assets", "img")
 MODELS = os.path.join(BASE, "assets", "models")
 
 
+@st.cache_data(show_spinner=False)
+def gif_em_loop(caminho):
+    """Lê o GIF e acrescenta a marcação de repetição infinita (sem recodificar)."""
+    with open(caminho, "rb") as f:
+        dados = f.read()
+    if b"NETSCAPE2.0" in dados[:2000] or dados[:3] != b"GIF":
+        return dados
+    pos = 13
+    if dados[10] & 0x80:  # tabela de cores global
+        pos += 3 * (2 ** ((dados[10] & 0x07) + 1))
+    bloco = b"\x21\xff\x0bNETSCAPE2.0\x03\x01\x00\x00\x00"
+    return dados[:pos] + bloco + dados[pos:]
+
+
 def mostrar_gif(nome, legenda):
     caminho = os.path.join(GIFS, nome)
     if os.path.exists(caminho):
-        st.image(caminho, caption=legenda, width="stretch")
+        st.image(gif_em_loop(caminho), caption=legenda, width="stretch")
     else:
         st.info(f"Arquivo não encontrado: assets/gifs/{nome}")
 
@@ -190,7 +204,7 @@ with aba_ao_vivo:
             with st.spinner("Simulando..."):
                 frames, total, passos = rodar_episodio(modelo, vento, int(seed), gravar=True)
                 buffer = io.BytesIO()
-                imageio.mimsave(buffer, frames[::2], format="GIF", fps=30)
+                imageio.mimsave(buffer, frames[::2], format="GIF", fps=30, loop=0)
             st.image(buffer.getvalue(), caption=f"{escolhido} | vento: {'sim' if vento else 'não'} | semente {int(seed)}")
             st.metric("Recompensa do episódio", f"{total:.1f}", f"{passos} passos", delta_color="off")
             st.caption("Cada pouso é um único episódio. A média de vários episódios está no botão ao lado.")
