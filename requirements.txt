@@ -1,0 +1,6 @@
+streamlit
+pandas
+imageio
+pillow
+gymnasium[box2d]
+stable-baselines3
