@@ -1,6 +1,6 @@
-# Pouso lunar com aprendizado por reforço (Questão 3)
+# Pouso lunar com aprendizado por reforço 
 
-Trabalho Final de Lógica Nebulosa — Questão 3 (Aprendizado por reforço)
+Trabalho Final de Lógica Nebulosa — (Aprendizado por reforço)
 
 - **Aluna:** Luciene Borges
 - **Professor:** Prof. Mardônio França
